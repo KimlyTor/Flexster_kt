@@ -1,17 +1,23 @@
 package com.example.flixster
 
+import android.os.Parcelable
+import kotlinx.parcelize.IgnoredOnParcel
+import kotlinx.parcelize.Parcelize
 import org.json.JSONArray
 
 //parse the API json data from MainActivity to this data class
 //by calling fromJsonArray() inside MainActivity
 //represent one movie object display to the UI
 //only pick the attributes you want from the API results
-data class Movie (
+@Parcelize
+data class Movie(
     val movieId: Int,
+    val voteAverage: Double,
     private val posterPath: String,
     val title: String,
     val overview: String,
-){
+) : Parcelable{
+    @IgnoredOnParcel
     //absolute path to the image with the size of 342px
     //check this for more sizes https://api.themoviedb.org/3/configuration?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed
     val posterImageUrl = "https://image.tmdb.org/t/p/w342/$posterPath"
@@ -25,6 +31,7 @@ data class Movie (
                 movies.add(
                     Movie(
                         movieJson.getInt("id"),
+                        movieJson.getDouble("vote_average"),
                         movieJson.getString("poster_path"),
                         movieJson.getString("title"),
                         movieJson.getString("overview")
